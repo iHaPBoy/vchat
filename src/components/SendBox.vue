@@ -136,7 +136,7 @@ export default {
 	text-align: center;
 	line-height: 50px;
 	position: absolute;
-	top: 0;
+	bottom: 0;
 	background-color: rgba(184, 197, 214, .1);
 	z-index: 999;
 }
