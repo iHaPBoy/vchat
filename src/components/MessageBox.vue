@@ -3,8 +3,12 @@
 	     class="msg-box"
 	     v-auto-bottom>
 		<div class="msg-item"
+		     v-bind:class="{ 'msg-item-active': msg.self }"
 		     v-for="msg in msgs"
-		     track-by="$index">{{ msg.author }}: {{ msg.content }}</div>
+		     track-by="$index">
+			<div class="msg-item-content"><span class="msg-item-sender">{{ msg.author }}: </span>{{ msg.content }}</div>
+			<div class="msg-item-datetime">{{ msg.datetime | moment('hh:mm') }}</div>
+		</div>
 	</div>
 </template>
 
@@ -23,13 +27,42 @@ export default {
 	overflow: auto;
 }
 
-.msg-box .msg-item {
+.msg-item {
 	padding: 10px 10px;
 	border-radius: 4px;
-	color: #5f5f5f;
+	color: #313131;
+	line-height: 1.2em;
+	border: 1px solid rgba(184, 197, 214, .1);
 }
 
-.msg-box .msg-item:nth-child(odd) {
+.msg-item+.msg-item {
+	margin-top: 10px;
+}
+
+.msg-item:after {
+	display: block;
+	content: "";
+	clear: both;
+}
+
+.msg-item-active {
 	background: rgba(184, 197, 214, .1);
+	border: none;
+}
+
+.msg-item-sender {
+	font-weight: 600;
+	color: #555;
+}
+
+.msg-item-content {
+	float: left;
+	word-break: break-all;
+}
+
+.msg-item-datetime {
+	width: 40px;
+	float: right;
+	color: #5f5f5f;
 }
 </style>

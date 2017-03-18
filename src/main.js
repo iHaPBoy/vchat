@@ -1,8 +1,17 @@
 import Vue from 'vue'
 import App from './App.vue'
 import VueSocketio from 'vue-socket.io'
+import Vuex from 'vuex'
+import store from './store'
+import VueMoment from 'vue-moment'
 
 Vue.use(VueSocketio, 'http://localhost:3000')
+
+Vue.use(Vuex)
+
+Vue.use(VueMoment);
+
+Vue.moment().locale('zh-CN');
 
 Vue.directive('focus', {
   inserted: function (el) {
@@ -23,7 +32,16 @@ Vue.directive('auto-bottom', {
   }
 })
 
-new Vue({
+const app = new Vue({
+  store,
   el: '#app',
   render: h => h(App)
 })
+
+if (window.Notification && Notification.permission !== "granted") {
+  Notification.requestPermission(function (status) {
+    if (Notification.permission !== status) {
+      Notification.permission = status;
+    }
+  });
+}

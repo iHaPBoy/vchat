@@ -25,6 +25,8 @@
 	</div>
 </template>
 <script>
+import { mapActions } from 'vuex'
+
 export default {
 	data: function () {
 		return {
@@ -36,6 +38,9 @@ export default {
 		}
 	},
 	methods: {
+		...mapActions([
+			'setCurrentUser'
+		]),
 		sendToParents: function () {
 			if (this.message.author == '') {
 				this.tips = '请输入昵称';
@@ -44,7 +49,13 @@ export default {
 				this.tips = '请输入内容';
 				setTimeout(() => { this.tips = '' }, 1000);
 			} else {
+				// setCurrentUser
+				this.setCurrentUser({ user: { userName: this.message.author } });
+
+				// send socket
 				this.$socket.emit('chat-msg', this.message);
+
+				// clear msg input
 				this.message.content = '';
 			}
 		}
@@ -90,6 +101,8 @@ export default {
 .msg-author {
 	width: 70px;
 	margin-left: 0;
+	font-weight: 500;
+	color: #555;
 }
 
 .line {
@@ -113,8 +126,8 @@ export default {
 }
 
 .msg-send:hover {
-	border: 1px solid #6fa3ef;
-	color: #6fa3ef;
+	border: 1px solid #0f88eb;
+	color: #0f88eb;
 }
 
 .tips {

@@ -10,10 +10,12 @@ io.on('connection', function (socket) {
   console.log('a user connected');
   io.emit('chat-msg', {
     author: 'vChat',
-    content: '有用户上线了!'
+    content: '有用户上线了!',
+    datetime: new Date()
   });
 
   socket.on('chat-msg', function (msg) {
+    msg.datetime = new Date();
     io.emit('chat-msg', msg);
     console.log('message: ' + msg);
   });

@@ -12,6 +12,7 @@
 import ChatHeader from './components/ChatHeader.vue'
 import MessageBox from './components/MessageBox.vue'
 import SendBox from './components/SendBox.vue'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'app',
@@ -27,8 +28,27 @@ export default {
   },
   sockets: {
     'chat-msg': function (msg) {
+      // 判断是否是当前用户
+      msg.self = this.currentUser && this.currentUser.userName == msg.author ? true : false;
+
+      // 加入消息数组
       this.messages.push(msg);
+
+      // 发送通知
+      if (!this.currentUser || this.currentUser.userName != msg.author) {
+        var notification = new Notification("您有新的消息", {
+          body: msg.author + ': ' + msg.content
+        });
+        notification.onshow = function () {
+          setTimeout(notification.close.bind(notification), 3000);
+        }
+      }
     }
+  },
+  computed: {
+    ...mapGetters([
+      'currentUser'
+    ])
   }
 }
 </script>
