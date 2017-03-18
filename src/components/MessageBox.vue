@@ -7,7 +7,7 @@
 		     v-for="msg in msgs"
 		     track-by="$index">
 			<div class="msg-item-content"><span class="msg-item-sender">{{ msg.author }}: </span>{{ msg.content }}</div>
-			<div class="msg-item-datetime">{{ msg.datetime | moment('hh:mm') }}</div>
+			<div class="msg-item-datetime">{{ msg.datetime | moment('HH:mm') }}</div>
 		</div>
 	</div>
 </template>
@@ -22,8 +22,8 @@ export default {
 .msg-box {
 	list-style-type: none;
 	margin: 0;
-	height: 100%;
-	padding: 60px 10px;
+	flex: 1;
+	padding: 10px;
 	overflow: auto;
 }
 
@@ -31,7 +31,7 @@ export default {
 	padding: 10px 10px;
 	border-radius: 4px;
 	color: #313131;
-	line-height: 1.2em;
+	line-height: 1.4em;
 	border: 1px solid rgba(184, 197, 214, .1);
 }
 
@@ -58,6 +58,7 @@ export default {
 .msg-item-content {
 	float: left;
 	word-break: break-all;
+	text-align: justify;
 }
 
 .msg-item-datetime {

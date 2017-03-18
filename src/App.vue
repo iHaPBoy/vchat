@@ -84,6 +84,8 @@ body {
   border-radius: 4px;
   margin: 20px auto;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 @media screen and (max-width: 640px) {

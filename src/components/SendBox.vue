@@ -68,8 +68,6 @@ export default {
 <style scoped>
 .sendbox {
 	height: 50px;
-	position: absolute;
-	bottom: 0;
 	width: 100%;
 	background: #fff;
 	padding: 8px;

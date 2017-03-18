@@ -7,8 +7,6 @@
 <style scoped>
 .chat-header {
 	height: 50px;
-	position: absolute;
-	top: 0;
 	width: 100%;
 	border-bottom: 1px solid rgba(184, 197, 214, .2);
 	background: #fff;
