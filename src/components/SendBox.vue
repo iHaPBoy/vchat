@@ -3,11 +3,11 @@
 		<transition name="fade">
 			<form class="msg-form"
 			      v-show="!tips"
-			      @submit.prevent="sendToParents">
-				<input class="msg-input msg-author"
+			      @submit.prevent="sendMsg">
+				<input class="msg-input msg-sender"
 				       type="text"
 				       placeholder="昵称"
-				       v-model="message.author"
+				       v-model="message.sender"
 				       v-focus />
 				<i class="line"></i>
 				<input class="msg-input msg-message"
@@ -31,7 +31,7 @@ export default {
 	data: function () {
 		return {
 			message: {
-				author: '',
+				sender: '',
 				content: '',
 			},
 			tips: ''
@@ -41,8 +41,8 @@ export default {
 		...mapActions([
 			'setCurrentUser'
 		]),
-		sendToParents: function () {
-			if (this.message.author == '') {
+		sendMsg: function () {
+			if (this.message.sender == '') {
 				this.tips = '请输入昵称';
 				setTimeout(() => { this.tips = '' }, 1000);
 			} else if (this.message.content == '') {
@@ -50,7 +50,7 @@ export default {
 				setTimeout(() => { this.tips = '' }, 1000);
 			} else {
 				// setCurrentUser
-				this.setCurrentUser({ user: { userName: this.message.author } });
+				this.setCurrentUser({ user: { userName: this.message.sender } });
 
 				// send socket
 				this.$socket.emit('chat-msg', this.message);
@@ -96,7 +96,7 @@ export default {
 	background-color: rgba(184, 197, 214, .1);
 }
 
-.msg-author {
+.msg-sender {
 	width: 70px;
 	margin-left: 0;
 	font-weight: 500;

@@ -6,7 +6,7 @@
 		     v-bind:class="{ 'msg-item-active': msg.self }"
 		     v-for="msg in msgs"
 		     track-by="$index">
-			<div class="msg-item-content"><span class="msg-item-sender">{{ msg.author }}: </span>{{ msg.content }}</div>
+			<div class="msg-item-content"><span class="msg-item-sender">{{ msg.sender }}: </span>{{ msg.content }}</div>
 			<div class="msg-item-datetime">{{ msg.datetime | moment('HH:mm') }}</div>
 		</div>
 	</div>

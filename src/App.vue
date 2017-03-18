@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <div id="chat">
-      <chat-header></chat-header>
+      <chat-header :onlineUsersCount="onlineUsersCount"></chat-header>
       <message-box :msgs="messages"></message-box>
       <send-box></send-box>
     </div>
@@ -22,25 +22,41 @@ export default {
   data() {
     return {
       messages: [
-        { author: '>.<', content: 'Welcome to vChat!' }
-      ]
+        { sender: '>.<', content: 'Welcome to vChat!', datetime: new Date() }
+      ],
+      onlineUsersCount: 0
     }
   },
   sockets: {
     'chat-msg': function (msg) {
-      // 判断是否是当前用户
-      msg.self = this.currentUser && this.currentUser.userName == msg.author ? true : false;
+      // 验证消息类型
+      if (msg.msgHeader.msgType == 'message' || msg.msgHeader.msgType == 'system') {
+        // 解析数据
+        var message = {};
+        message.self = this.currentUser && this.currentUser.userName == msg.msgBody.msgSender ? true : false;
+        message.sender = msg.msgBody.msgSender;
+        message.content = msg.msgBody.msgContent;
+        message.datetime = msg.msgBody.msgDatetime;
 
-      // 加入消息数组
-      this.messages.push(msg);
+        // 加入消息数组
+        this.messages.push(message);
 
-      // 发送通知
-      if (!this.currentUser || this.currentUser.userName != msg.author) {
-        var notification = new Notification("您有新的消息", {
-          body: msg.author + ': ' + msg.content
-        });
-        notification.onshow = function () {
-          setTimeout(notification.close.bind(notification), 3000);
+        // 发送聊天消息通知
+        if (msg.msgHeader.msgType == 'message') {
+          if (!message.self) {
+            var notification = new Notification("您有新的消息", {
+              body: message.sender + ': ' + message.content
+            });
+            notification.onshow = function () {
+              setTimeout(notification.close.bind(notification), 3000);
+            }
+          }
+        }
+      } else if (msg.msgHeader.msgType == 'status') {
+        // 解析数据
+        if (msg.msgBody.msgSender == 'onlineUsersCount') {
+          // 更新在线人数
+          this.onlineUsersCount = msg.msgBody.msgContent;
         }
       }
     }
