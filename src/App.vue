@@ -1,60 +1,82 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
-    <h1></h1>
-    <h2>Essential Links</h2>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank">Forum</a></li>
-      <li><a href="https://gitter.im/vuejs/vue" target="_blank">Gitter Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank">Twitter</a></li>
-    </ul>
-    <h2>Ecosystem</h2>
-    <ul>
-      <li><a href="http://router.vuejs.org/" target="_blank">vue-router</a></li>
-      <li><a href="http://vuex.vuejs.org/" target="_blank">vuex</a></li>
-      <li><a href="http://vue-loader.vuejs.org/" target="_blank">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank">awesome-vue</a></li>
-    </ul>
+    <div id="chat">
+      <chat-header></chat-header>
+      <message-box :msgs="messages"></message-box>
+      <send-box></send-box>
+    </div>
   </div>
 </template>
 
 <script>
+import ChatHeader from './components/ChatHeader.vue'
+import MessageBox from './components/MessageBox.vue'
+import SendBox from './components/SendBox.vue'
+
 export default {
   name: 'app',
-  data () {
+  components: {
+    ChatHeader, MessageBox, SendBox
+  },
+  data() {
     return {
-      msg: 'Welcome to Your Vue.js App'
+      messages: [
+        { author: '>.<', content: 'Welcome to vChat!' }
+      ]
+    }
+  },
+  sockets: {
+    'chat-msg': function (msg) {
+      this.messages.push(msg);
     }
   }
 }
 </script>
 
 <style lang="scss">
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-
-h1, h2 {
-  font-weight: normal;
-}
-
-ul {
-  list-style-type: none;
+* {
+  margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 
-li {
-  display: inline-block;
-  margin: 0 10px;
+html,
+body {
+  height: 100%;
 }
 
-a {
-  color: #42b983;
+body {
+  font-family: -apple-system, SF UI Text, Arial, PingFang SC, Hiragino Sans GB, Microsoft YaHei, WenQuanYi Micro Hei, sans-serif;
+  background: #f5f5f5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 13px;
+}
+
+#chat {
+  width: 440px;
+  height: 500px;
+  position: relative;
+  border: 1px solid rgba(184, 197, 214, .2);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, .04);
+  background: #fff;
+  border-radius: 4px;
+  margin: 20px auto;
+  overflow: hidden;
+}
+
+@media screen and (max-width: 640px) {
+  body {
+    display: block;
+  }
+  #app {
+    height: 100%;
+  }
+  #chat {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+  }
 }
 </style>
