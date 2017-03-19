@@ -7,12 +7,13 @@
 				<input class="msg-input msg-sender"
 				       type="text"
 				       placeholder="昵称"
-				       v-model="message.sender"
-				       v-focus />
+				       ref="senderInput"
+				       v-model="sender" />
 				<i class="line"></i>
 				<input class="msg-input msg-message"
-				       v-model="message.content"
-				       placeholder="在此输入信息" />
+				       v-model="message"
+				       placeholder="在此输入信息"
+				       ref="messageInput" />
 				<button class="msg-send">发送</button>
 			</form>
 		</transition>
@@ -30,10 +31,8 @@ import { mapActions } from 'vuex'
 export default {
 	data: function () {
 		return {
-			message: {
-				sender: '',
-				content: '',
-			},
+			sender: '',
+			message: '',
 			tips: ''
 		}
 	},
@@ -42,26 +41,44 @@ export default {
 			'setCurrentUser'
 		]),
 		sendMsg: function () {
-			if (this.message.sender == '') {
+			if (this.sender == '') {
 				this.tips = '请输入昵称';
 				setTimeout(() => { this.tips = '' }, 1000);
-			} else if (this.message.content == '') {
+			} else if (this.message == '') {
 				this.tips = '请输入内容';
 				setTimeout(() => { this.tips = '' }, 1000);
 			} else {
-				// setCurrentUser
-				this.setCurrentUser({ user: { userName: this.message.sender } });
 
 				// send socket
-				this.$socket.emit('chat-msg', this.message);
+				var msg = {
+					sender: this.sender,
+					content: this.message
+				}
+				this.$socket.emit('chat-msg', msg);
 
 				// clear msg input
-				this.message.content = '';
+				this.message = '';
 			}
 		}
 	},
 	mounted() {
-		console.log(this.$refs)
+		// getCurrentUser
+		if (localStorage.getItem('currentUser')) {
+			this.sender = JSON.parse(localStorage.getItem('currentUser')).userName;
+		}
+
+		// Focus
+		if (this.sender == '') {
+			this.$refs.senderInput.focus();
+		} else {
+			this.$refs.messageInput.focus();
+		}
+	},
+	watch: {
+		sender(to, from) {
+			// setCurrentUser
+			this.setCurrentUser({ user: { userName: to } });
+		}
 	}
 }
 </script>

@@ -14,6 +14,9 @@ const store = new Vuex.Store({
 		}, {
 			user
 		}) => {
+			// Save User Info
+			localStorage.setItem('currentUser', JSON.stringify(user))
+			// Update State
 			commit('SET_CURRENT_USER', {
 				user
 			})

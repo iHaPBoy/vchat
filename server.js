@@ -24,7 +24,7 @@ app.get('/', function (req, res) {
 io.on('connection', function (socket) {
   console.log('a user connected');
   // 广播: 有用户上线
-  sendBroadcastMsg('system', 'vChat', '有用户上线啦!');
+  // sendBroadcastMsg('system', 'vChat', '有用户上线啦!');
   io.clients(function (error, clients) {
     if (error) throw error;
     console.log('online user count: ' + clients.length);
@@ -43,7 +43,7 @@ io.on('connection', function (socket) {
   socket.on('disconnect', function () {
     console.log('a user disconnected');
     // 广播: 有用户下线
-    sendBroadcastMsg('system', 'vChat', '有用户下线啦!');
+    // sendBroadcastMsg('system', 'vChat', '有用户下线啦!');
     io.clients(function (error, clients) {
       if (error) throw error;
       console.log('online user count: ' + clients.length);
