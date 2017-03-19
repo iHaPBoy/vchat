@@ -4,8 +4,11 @@ import VueSocketio from 'vue-socket.io'
 import Vuex from 'vuex'
 import store from './store'
 import VueMoment from 'vue-moment'
+import {
+  WEBSOCKET_ROOT
+} from './config.js'
 
-Vue.use(VueSocketio, 'http://localhost:3000')
+Vue.use(VueSocketio, WEBSOCKET_ROOT)
 
 Vue.use(Vuex)
 

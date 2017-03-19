@@ -27,6 +27,25 @@ export default {
       onlineUsersCount: 0
     }
   },
+  methods: {
+    neteaseMusicFilter(msg) {
+      // 判断是否包含网易云音乐网址
+      if (/music\.163\.com\/.*song\?id=\d+/.test(msg.content)) {
+        // 提取音乐 id
+        var musicId = msg.content.match(/id=\d+/)[0].replace('id=', '');
+
+        // 更新消息体
+        msg.content = '分享了一首音乐';
+        msg.extension = {
+          component: 'music-player',
+          data: {
+            musicId
+          }
+        }
+      }
+      return msg;
+    }
+  },
   sockets: {
     'chat-msg': function (msg) {
       // 验证消息类型
@@ -37,6 +56,9 @@ export default {
         message.sender = msg.msgBody.msgSender;
         message.content = msg.msgBody.msgContent;
         message.datetime = msg.msgBody.msgDatetime;
+
+        // 网易云音乐解析
+        message = this.neteaseMusicFilter(message);
 
         // 加入消息数组
         this.messages.push(message);

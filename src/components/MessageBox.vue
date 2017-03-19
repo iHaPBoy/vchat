@@ -4,12 +4,15 @@
 	     v-auto-bottom>
 		<div class="msg-item"
 		     v-bind:class="{ 'msg-item-active': msg.self }"
-		     v-for="msg in getMsgs"
+		     v-for="msg in msgs"
 		     track-by="$index">
-			<div class="msg-item-content">
-				<span class="msg-item-sender">{{ msg.sender }}: </span> {{ msg.content }}
-				<div v-html="msg.extension"
-				     v-show="msg.extension"></div>
+			<div class="msg-item-content-wrap">
+				<div class="msg-item-content">
+					<span class="msg-item-sender">{{ msg.sender }}: </span> {{ msg.content }}
+					<div :is="msg.extension.component"
+					     :data="msg.extension.data"
+					     v-if="msg.extension"></div>
+				</div>
 			</div>
 			<div class="msg-item-datetime">{{ msg.datetime | moment('HH:mm') }}</div>
 		</div>
@@ -17,25 +20,12 @@
 </template>
 
 <script>
+import MusicPlayer from './MusicPlayer.vue'
+
 export default {
 	props: ['msgs'],
-	computed: {
-		getMsgs() {
-			var self = this;
-			this.msgs.forEach(function (item, index, array) {
-				// 判断是否包含网易云音乐网址
-				if (/music\.163\.com\/\#\/song\?id=\d+/.test(item.content)) {
-
-					// 提取音乐 id
-					var musicId = item.content.match(/id=\d+/)[0].replace('id=', '');
-
-					// 显示音乐
-					self.msgs[index].content = '分享了一首音乐';
-					self.msgs[index].extension = '<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=298 height=52 src="//music.163.com/outchain/player?type=2&id=' + musicId + '&auto=0&height=32"></iframe>';
-				}
-			})
-			return this.msgs;
-		}
+	components: {
+		MusicPlayer
 	}
 }
 </script>
@@ -77,10 +67,16 @@ export default {
 	color: #555;
 }
 
-.msg-item-content {
+.msg-item-content-wrap {
 	float: left;
+	margin-right: -50px;
+	width: 100%;
+}
+
+.msg-item-content {
 	word-break: break-all;
 	text-align: justify;
+	margin-right: 50px;
 }
 
 .msg-item-datetime {
