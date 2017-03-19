@@ -3,6 +3,7 @@
 		<span v-if="error">{{ tips }}</span>
 		<vue-aplayer :music="song"
 		             :showlrc="showlrc"
+		             :mutex="true"
 		             v-if="!loading && !error"></vue-aplayer>
 	</div>
 </template>
