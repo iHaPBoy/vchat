@@ -9,11 +9,14 @@
 				       placeholder="昵称"
 				       ref="senderInput"
 				       v-model="sender" />
-				<i class="line"></i>
-				<input class="msg-input msg-message"
-				       v-model="message"
-				       placeholder="在此输入信息"
-				       ref="messageInput" />
+				<div class="line"></div>
+				<textarea class="msg-input msg-message"
+				          maxlength="300"
+				          v-auto-height
+				          v-model="message"
+				          placeholder="在此输入信息"
+				          @keydown.enter.prevent.stop="sendMsg"
+				          ref="messageInput"></textarea>
 				<button class="msg-send">发送</button>
 			</form>
 		</transition>
@@ -74,6 +77,16 @@ export default {
 			this.$refs.messageInput.focus();
 		}
 	},
+	directives: {
+		autoHeight: {
+			update: function (el) {
+				setTimeout(function () {
+					el.style.height = '30px';
+					el.style.height = el.scrollHeight + 'px';
+				}, 0);
+			}
+		}
+	},
 	watch: {
 		sender(to, from) {
 			// setCurrentUser
@@ -84,7 +97,7 @@ export default {
 </script>
 <style scoped>
 .sendbox {
-	height: 50px;
+	height: auto;
 	width: 100%;
 	background: #fff;
 	padding: 8px;
@@ -94,18 +107,20 @@ export default {
 .msg-form {
 	width: 100%;
 	display: flex;
+	align-items: flex-end;
 }
 
 .msg-input {
 	color: #5f5f5f;
 	border: 0;
-	padding: 0 8px;
+	padding: 6px 8px;
 	font-size: 12px;
 	outline: none;
 	text-align: center;
-	line-height: 32px;
 	border-radius: 3px;
 	margin: 0 6px;
+	line-height: 18px;
+	height: 30px;
 }
 
 .msg-input:hover,
@@ -114,7 +129,7 @@ export default {
 }
 
 .msg-sender {
-	width: 70px;
+	width: 65px;
 	margin-left: 0;
 	font-weight: 500;
 	color: #555;
@@ -122,11 +137,16 @@ export default {
 
 .line {
 	display: block;
-	border-right: 1px solid rgba(184, 197, 214, .2);
+	width: 1px;
+	height: 26px;
+	margin: 2px 0;
+	background: rgba(184, 197, 214, .2);
 }
 
 .msg-message {
 	flex-grow: 1;
+	resize: none;
+	overflow: hidden;
 }
 
 .msg-send {
@@ -137,7 +157,8 @@ export default {
 	background: #fff;
 	border: 1px solid #eaeaea;
 	border-radius: 16px;
-	line-height: 32px;
+	line-height: 30px;
+	height: 30px;
 }
 
 .msg-send:hover {
