@@ -69,19 +69,19 @@ export default {
 
 .msg-item-content-wrap {
 	float: left;
-	margin-right: -50px;
+	margin-right: -40px;
 	width: 100%;
 }
 
 .msg-item-content {
-	word-break: break-all;
-	text-align: justify;
-	margin-right: 50px;
+	word-break: break-word;
+	margin-right: 40px;
 }
 
 .msg-item-datetime {
 	width: 40px;
 	float: right;
 	color: #5f5f5f;
+	text-align: right;
 }
 </style>

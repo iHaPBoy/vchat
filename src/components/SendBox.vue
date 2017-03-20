@@ -2,7 +2,7 @@
 	<div class="sendbox">
 		<transition name="fade">
 			<form class="msg-form"
-			      v-show="!tips"
+			      v-if="!tips"
 			      @submit.prevent="sendMsg">
 				<input class="msg-input msg-sender"
 				       type="text"
@@ -19,10 +19,8 @@
 				          ref="messageInput"></textarea>
 				<button class="msg-send">发送</button>
 			</form>
-		</transition>
-		<transition name="fade">
-			<div class="tips"
-			     v-show="tips">
+			<div v-else
+			     class="tips">
 				{{ tips }}
 			</div>
 		</transition>
@@ -78,13 +76,11 @@ export default {
 		}
 	},
 	directives: {
-		autoHeight: {
-			update: function (el) {
-				setTimeout(function () {
-					el.style.height = '30px';
-					el.style.height = el.scrollHeight + 'px';
-				}, 0);
-			}
+		autoHeight: function (el) {
+			setTimeout(function () {
+				el.style.height = '30px';
+				el.style.height = el.scrollHeight + 'px';
+			}, 0);
 		}
 	},
 	watch: {
@@ -102,6 +98,7 @@ export default {
 	background: #fff;
 	padding: 8px;
 	border-top: 1px solid rgba(184, 197, 214, .2);
+	min-height: 47px;
 }
 
 .msg-form {
@@ -147,8 +144,7 @@ export default {
 	flex-grow: 1;
 	resize: none;
 	overflow: hidden;
-	text-align: justify;
-	word-break: break-all;
+	word-break: break-word;
 }
 
 .msg-send {
@@ -170,11 +166,11 @@ export default {
 
 .tips {
 	color: #5f5f5f;
-	height: 50px;
+	height: 47px;
 	width: 100%;
 	left: 0;
 	text-align: center;
-	line-height: 50px;
+	line-height: 47px;
 	position: absolute;
 	bottom: 0;
 	background-color: rgba(184, 197, 214, .1);
