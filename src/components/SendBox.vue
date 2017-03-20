@@ -116,7 +116,6 @@ export default {
 	padding: 6px 8px;
 	font-size: 12px;
 	outline: none;
-	text-align: center;
 	border-radius: 3px;
 	margin: 0 6px;
 	line-height: 18px;
@@ -133,6 +132,7 @@ export default {
 	margin-left: 0;
 	font-weight: 500;
 	color: #555;
+	text-align: center;
 }
 
 .line {
@@ -147,6 +147,8 @@ export default {
 	flex-grow: 1;
 	resize: none;
 	overflow: hidden;
+	text-align: justify;
+	word-break: break-all;
 }
 
 .msg-send {
