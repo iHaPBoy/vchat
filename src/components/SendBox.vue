@@ -5,10 +5,16 @@
 			      v-if="!tips"
 			      @submit.prevent="sendMsg">
 				<input class="msg-input msg-sender"
-				       type="text"
-				       placeholder="昵称"
-				       ref="senderInput"
-				       v-model="sender" />
+					   type="text"
+					   placeholder="昵称"
+					   ref="senderInput"
+					   v-model="sender" />
+				<div class="line"></div>
+				<input class="msg-input msg-to"
+					   type="text"
+					   placeholder="接收人"
+					   ref="toInput"
+					   v-model="to" />
 				<div class="line"></div>
 				<textarea class="msg-input msg-message"
 				          maxlength="300"
@@ -33,29 +39,41 @@ export default {
 	data: function () {
 		return {
 			sender: '',
+            to: '',
 			message: '',
 			tips: ''
 		}
 	},
 	methods: {
 		...mapActions([
-			'setCurrentUser'
+			'setCurrentUser',
+            'addMessage'
 		]),
 		sendMsg: function () {
-			if (this.sender == '') {
+			if (this.sender === '') {
 				this.tips = '请输入昵称';
 				setTimeout(() => { this.tips = '' }, 1000);
-			} else if (this.message == '') {
+			} else if (this.message.trim() === '') {
 				this.tips = '请输入内容';
 				setTimeout(() => { this.tips = '' }, 1000);
 			} else {
 
 				// send socket
-				var msg = {
+				let message = {
+				    self: true,
+				    to: this.to,
 					sender: this.sender,
-					content: this.message
-				}
-				this.$socket.emit('chat-msg', msg);
+					content: this.message.trim()
+				};
+
+				// setName
+                this.$socket.emit('setName', this.sender);
+
+                // sendMsg
+				this.$socket.emit(this.to === '' ? 'chatMsg' : 'sayTo', message);
+
+				// addMessage to state TODO check message has send success
+				this.addMessage({ message });
 
 				// clear msg input
 				this.message = '';
@@ -69,7 +87,7 @@ export default {
 		}
 
 		// Focus
-		if (this.sender == '') {
+		if (this.sender === '') {
 			this.$refs.senderInput.focus();
 		} else {
 			this.$refs.messageInput.focus();
@@ -124,7 +142,7 @@ export default {
 	background-color: rgba(184, 197, 214, .1);
 }
 
-.msg-sender {
+.msg-sender, .msg-to {
 	width: 65px;
 	margin-left: 0;
 	font-weight: 500;

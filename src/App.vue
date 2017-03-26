@@ -12,7 +12,7 @@
 import ChatHeader from './components/ChatHeader.vue'
 import MessageBox from './components/MessageBox.vue'
 import SendBox from './components/SendBox.vue'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'app',
@@ -21,18 +21,21 @@ export default {
   },
   data() {
     return {
-      messages: [
-        { sender: '>.<', content: 'Welcome to vChat!', datetime: new Date() }
-      ],
+//      messages: [
+//        { sender: '>.<', content: 'Welcome to vChat!', datetime: new Date() }
+//      ],
       onlineUsersCount: 0
     }
   },
   methods: {
+    ...mapActions([
+      'addMessage'
+    ]),
     neteaseMusicFilter(msg) {
       // 判断是否包含网易云音乐网址
       if (/music\.163\.com\/.*song\?id=\d+/.test(msg.content)) {
         // 提取音乐 id
-        var musicId = msg.content.match(/id=\d+/)[0].replace('id=', '');
+        const musicId = msg.content.match(/id=\d+/)[0].replace('id=', '');
 
         // 更新消息体
         msg.content = '分享了一首音乐';
@@ -47,12 +50,17 @@ export default {
     }
   },
   sockets: {
-    'chat-msg': function (msg) {
+    'chatMsg': function (msg) {
       // 验证消息类型
-      if (msg.msgHeader.msgType == 'message' || msg.msgHeader.msgType == 'system') {
+      if (msg.msgHeader.msgType === 'message' || msg.msgHeader.msgType === 'system') {
+
+        // 如果是自己发送的消息，返回
+        if (this.currentUser && this.currentUser.userName === msg.msgBody.msgSender) {
+          return;
+        }
+
         // 解析数据
-        var message = {};
-        message.self = this.currentUser && this.currentUser.userName == msg.msgBody.msgSender ? true : false;
+        let message = {};
         message.sender = msg.msgBody.msgSender;
         message.content = msg.msgBody.msgContent;
         message.datetime = msg.msgBody.msgDatetime;
@@ -61,22 +69,20 @@ export default {
         message = this.neteaseMusicFilter(message);
 
         // 加入消息数组
-        this.messages.push(message);
+        this.addMessage({ message });
 
         // 发送聊天消息通知
-        if (msg.msgHeader.msgType == 'message') {
-          if (!message.self) {
-            var notification = new Notification("您有新的消息", {
-              body: message.sender + ': ' + message.content
-            });
-            notification.onshow = function () {
-              setTimeout(notification.close.bind(notification), 3000);
-            }
+        if (msg.msgHeader.msgType === 'message') {
+          const notification = new Notification("您有新的消息", {
+            body: message.sender + ': ' + message.content
+          });
+          notification.onshow = function () {
+            setTimeout(notification.close.bind(notification), 3000);
           }
         }
-      } else if (msg.msgHeader.msgType == 'status') {
+      } else if (msg.msgHeader.msgType === 'status') {
         // 解析数据
-        if (msg.msgBody.msgSender == 'onlineUsersCount') {
+        if (msg.msgBody.msgSender === 'onlineUsersCount') {
           // 更新在线人数
           this.onlineUsersCount = msg.msgBody.msgContent;
         }
@@ -85,7 +91,8 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'currentUser'
+      'currentUser',
+      'messages'
     ])
   }
 }
