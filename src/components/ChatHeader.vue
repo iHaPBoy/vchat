@@ -1,6 +1,6 @@
 <template>
 	<div class="chat-header">
-		<h1>vChat <small>({{ onlineUsersCount }})</small></h1>
+		<h1>vChat <small v-if="onlineUsersCount">({{ onlineUsersCount }})</small></h1>
 	</div>
 </template>
 

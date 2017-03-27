@@ -1,19 +1,31 @@
 <template>
     <div id="login"
          class="container">
-        昵称：
-        <input type="text"
-               v-model="userName">
-        <button @click="login">登录</button>
+        <chat-header :onlineUsersCount="onlineUsersCount"></chat-header>
+        <div class="form-wrap">
+            <div id="login-form" class="form-group">
+                <label>昵称</label>
+                <input type="text"
+                       v-model="userName"
+                       class="msg-input msg-sender">
+                <button @click="login"
+                        class="msg-send">登录</button>
+            </div>
+        </div>
     </div>
 </template>
 
 <script type="text/javascript">
+import ChatHeader from '../components/ChatHeader.vue'
 import {
     mapActions
 } from 'vuex'
 
 export default {
+    name: 'LoginView',
+    components: {
+        ChatHeader
+    },
     data() {
         return {
             userName: ''
@@ -55,7 +67,13 @@ export default {
 <style>
 #login {
     display: flex;
-    align-items: center;
-    justify-content: center;
+    flex-direction: column;
+}
+
+#login-form {
+	margin: 0;
+	flex: 1;
+	padding: 10px;
+	overflow: auto;
 }
 </style>
