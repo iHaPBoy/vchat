@@ -6,7 +6,8 @@ Vue.use(Vuex);
 const store = new Vuex.Store({
   state: {
     currentUser: null,
-    messages: []
+    messages: [],
+    concurrentUsers: 0
   },
 
   actions: {
@@ -18,6 +19,9 @@ const store = new Vuex.Store({
     },
     addMessage: ({commit}, {message}) => {
       commit('ADD_MESSAGE', {message})
+    },
+    setConcurrentUsers: ({commit}, count) => {
+      commit('SET_CONCURRENT_USERS', count)
     }
   },
 
@@ -27,15 +31,21 @@ const store = new Vuex.Store({
     },
     ADD_MESSAGE: (state, {message}) => {
       state.messages.push(message);
+    },
+    SET_CONCURRENT_USERS: (state, count) => {
+      state.concurrentUsers = count;
     }
   },
 
   getters: {
     currentUser(state) {
-      return state.currentUser
+      return state.currentUser;
     },
     messages(state) {
-      return state.messages
+      return state.messages;
+    },
+    concurrentUsers(state) {
+      return state.concurrentUsers;
     }
   }
 });

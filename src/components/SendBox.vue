@@ -4,15 +4,15 @@
 			<form class="msg-form"
 			      v-if="!tips"
 			      @submit.prevent="sendMsg">
-				<input class="msg-input msg-sender"
-					   type="text"
-					   placeholder="昵称"
-					   ref="senderInput"
-					   v-model="sender" />
-				<div class="line"></div>
+				<!--<input class="msg-input msg-sender"-->
+					   <!--type="text"-->
+					   <!--placeholder="昵称"-->
+					   <!--ref="senderInput"-->
+					   <!--v-model="sender" />-->
+				<!--<div class="line"></div>-->
 				<input class="msg-input msg-to"
 					   type="text"
-					   placeholder="接收人"
+					   placeholder="所有人"
 					   ref="toInput"
 					   v-model="to" />
 				<div class="line"></div>
@@ -23,7 +23,7 @@
 				          placeholder="在此输入信息"
 				          @keydown.enter.prevent.stop="sendMsg"
 				          ref="messageInput"></textarea>
-				<button class="msg-send">发送</button>
+				<button class="btn msg-send">发送</button>
 			</form>
 			<div v-else
 			     class="tips">
@@ -167,19 +167,6 @@ export default {
 
 .msg-send {
 	width: 60px;
-	color: #313131;
-	padding: 0;
-	outline: none;
-	background: #fff;
-	border: 1px solid #eaeaea;
-	border-radius: 16px;
-	line-height: 30px;
-	height: 30px;
-}
-
-.msg-send:hover {
-	border: 1px solid #0f88eb;
-	color: #0f88eb;
 }
 
 .tips {

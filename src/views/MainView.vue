@@ -1,7 +1,7 @@
 <template>
     <div id="chat"
          class="container">
-        <chat-header :onlineUsersCount="onlineUsersCount"></chat-header>
+        <chat-header></chat-header>
         <message-box :msgs="messages"></message-box>
         <send-box></send-box>
     </div>
@@ -30,7 +30,6 @@ export default {
             //     content: 'Welcome to vChat!',
             //     datetime: new Date()
             // }],
-            onlineUsersCount: 0
         }
     },
     methods: {
@@ -88,12 +87,6 @@ export default {
                         setTimeout(notification.close.bind(notification), 3000);
                     }
                 }
-            } else if (msg.msgHeader.msgType === 'status') {
-                // 解析数据
-                if (msg.msgBody.msgSender === 'onlineUsersCount') {
-                    // 更新在线人数
-                    this.onlineUsersCount = msg.msgBody.msgContent;
-                }
             }
         }
     },
@@ -113,12 +106,6 @@ export default {
 }
 
 @media screen and (max-width: 640px) {
-    body {
-        display: block;
-    }
-    #app {
-        height: 100%;
-    }
     #chat {
         width: 100%;
         height: 100%;

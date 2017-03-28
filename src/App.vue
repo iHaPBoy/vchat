@@ -1,11 +1,29 @@
 <template>
-    <div id="app">
-        <router-view></router-view>
-    </div>
+  <div id="app">
+    <router-view></router-view>
+  </div>
 </template>
 
 <script>
-export default {
-    name: 'app'
-}
+  import {
+    mapGetters,
+    mapActions
+  } from 'vuex'
+
+  export default {
+    name: 'app',
+    methods: {
+      ...mapActions([
+        'setConcurrentUsers'
+      ])
+    },
+    sockets: {
+      'updateConcurrentUsers': function (count) {
+        this.setConcurrentUsers(count);
+      }
+    },
+    mounted() {
+
+    }
+  }
 </script>

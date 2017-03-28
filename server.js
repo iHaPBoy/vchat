@@ -92,8 +92,9 @@ io.on('connection', function (socket) {
     if (error) throw error;
     userSessions.push({socketId: socket.id});
     console.log('[SESSION] ADD SESSION: ' + socket.id);
-    sendMsg(io, 'broadcast', 'status', 'onlineUsersCount', clients.length);
-    console.log('[STATUS] BROADCAST: [onlineUsersCount] : ' + clients.length);
+    // sendMsg(io, 'broadcast', 'status', 'onlineUsersCount', clients.length);
+    io.emit('updateConcurrentUsers', clients.length);
+    console.log('[STATUS] BROADCAST: [updateConcurrentUsers] : ' + clients.length);
   });
 
   // 用户下线 - 广播在线人数
@@ -102,8 +103,9 @@ io.on('connection', function (socket) {
       if (error) throw error;
       removeSessionBySocketId(socket.id);
       console.log('[SESSION] REMOVE SESSION: ' + socket.id);
-      sendMsg(io, 'broadcast', 'status', 'onlineUsersCount', clients.length);
-      console.log('[STATUS] BROADCAST: [onlineUsersCount] : ' + clients.length);
+      // sendMsg(io, 'broadcast', 'status', 'onlineUsersCount', clients.length);
+      io.emit('updateConcurrentUsers', clients.length);
+      console.log('[STATUS] BROADCAST: [updateConcurrentUsers] : ' + clients.length);
     });
   });
 });
